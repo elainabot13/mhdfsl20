@@ -1,0 +1,1232 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0"/>
+  <title>Ken - Portfolio Simple</title>
+  <link href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600;700&display=swap" rel="stylesheet">
+  <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
+  <style>
+    * { 
+      box-sizing: border-box; 
+      margin: 0; 
+      padding: 0; 
+    }
+
+    :root {
+      --harvey-dark: #1f4037;
+      --harvey-light: #99f2c8;
+      --dark-bg: linear-gradient(180deg, #2c5364 0%, #203a43 50%, #0f2027 100%);
+      --light-bg: linear-gradient(180deg, #99f2c8 0%, #1f4037 100%);
+      --glass-bg-dark: rgba(255, 255, 255, 0.05);
+      --glass-bg-light: rgba(255, 255, 255, 0.08);
+      --glass-border-dark: rgba(255, 255, 255, 0.1);
+      --glass-border-light: rgba(255, 255, 255, 0.15);
+      --text-primary-dark: #ffffff;
+      --text-primary-light: #ffffff;
+      --text-secondary-dark: rgba(255, 255, 255, 0.9);
+      --text-secondary-light: rgba(255, 255, 255, 0.9);
+      --shadow-light: 0 8px 32px rgba(31, 64, 55, 0.2);
+      --shadow-heavy: 0 20px 60px rgba(31, 64, 55, 0.3);
+    }
+
+    [data-theme="dark"] {
+      --current-bg: var(--dark-bg);
+      --glass-bg: var(--glass-bg-dark);
+      --glass-border: var(--glass-border-dark);
+      --text-primary: var(--text-primary-dark);
+      --text-secondary: var(--text-secondary-dark);
+    }
+
+    [data-theme="light"] {
+      --current-bg: var(--light-bg);
+      --glass-bg: var(--glass-bg-light);
+      --glass-border: var(--glass-border-light);
+      --text-primary: var(--text-primary-light);
+      --text-secondary: var(--text-secondary-light);
+    }
+
+    html {
+      scroll-behavior: smooth;
+    }
+
+    body {
+      font-family: 'Inter', -apple-system, BlinkMacSystemFont, 'Segoe UI', sans-serif;
+      background: var(--current-bg);
+      color: var(--text-primary);
+      min-height: 100vh;
+      display: flex;
+      justify-content: center;
+      align-items: center;
+      padding: 1rem;
+      overflow-x: hidden;
+      transition: all 0.8s cubic-bezier(0.4, 0, 0.2, 1);
+      will-change: background;
+    }
+
+    body::before {
+      content: '';
+      position: fixed;
+      top: 0;
+      left: 0;
+      width: 100%;
+      height: 100%;
+      background: radial-gradient(circle at 20% 80%, rgba(120, 119, 198, 0.3) 0%, transparent 50%),
+                  radial-gradient(circle at 80% 20%, rgba(255, 119, 198, 0.3) 0%, transparent 50%),
+                  radial-gradient(circle at 40% 40%, rgba(120, 219, 255, 0.3) 0%, transparent 50%);
+      pointer-events: none;
+      z-index: -1;
+      animation: floatingBg 20s ease-in-out infinite;
+    }
+
+    @keyframes floatingBg {
+      0%, 100% { transform: translateY(0px) rotate(0deg); }
+      33% { transform: translateY(-20px) rotate(1deg); }
+      66% { transform: translateY(20px) rotate(-1deg); }
+    }
+
+    .theme-toggle {
+      position: fixed;
+      top: 20px;
+      right: 20px;
+      background: var(--glass-bg);
+      backdrop-filter: blur(20px);
+      border: 1px solid var(--glass-border);
+      border-radius: 50px;
+      padding: 0.8rem;
+      cursor: pointer;
+      transition: all 0.4s cubic-bezier(0.4, 0, 0.2, 1);
+      z-index: 1000;
+      color: var(--text-primary);
+      font-size: 1.2rem;
+      width: 50px;
+      height: 50px;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      will-change: transform, background;
+    }
+
+    .theme-toggle:hover {
+      background: rgba(255, 255, 255, 0.15);
+      transform: scale(1.1) rotate(180deg);
+      box-shadow: 0 10px 30px rgba(0, 0, 0, 0.2);
+    }
+
+    .theme-toggle:active {
+      transform: scale(0.95) rotate(180deg);
+    }
+
+    .container, .main-content {
+      background: var(--glass-bg);
+      backdrop-filter: blur(20px);
+      border: 1px solid var(--glass-border);
+      border-radius: 24px;
+      padding: 2.5rem;
+      max-width: 420px;
+      width: 100%;
+      text-align: center;
+      box-shadow: var(--shadow-light);
+      display: none;
+      animation: slideUpFade 1.2s cubic-bezier(0.4, 0, 0.2, 1);
+      position: relative;
+      transition: all 0.6s cubic-bezier(0.4, 0, 0.2, 1);
+      will-change: transform, opacity;
+    }
+
+    .container::before, .main-content::before {
+      content: '';
+      position: absolute;
+      top: 0;
+      left: 0;
+      right: 0;
+      height: 1px;
+      background: linear-gradient(90deg, transparent, rgba(255, 255, 255, 0.3), transparent);
+      border-radius: 24px 24px 0 0;
+      animation: shimmer 3s ease-in-out infinite;
+    }
+
+    @keyframes shimmer {
+      0%, 100% { opacity: 0.3; }
+      50% { opacity: 0.8; }
+    }
+
+    #shop {
+      max-width: 600px;
+      background: var(--glass-bg);
+      backdrop-filter: blur(25px);
+    }
+
+    #payment {
+      max-width: 550px;
+      background: var(--glass-bg);
+      backdrop-filter: blur(25px);
+    }
+
+    .profile-img {
+      width: 120px;
+      height: 120px;
+      border-radius: 50%;
+      object-fit: cover;
+      border: 4px solid rgba(255, 255, 255, 0.3);
+      margin-bottom: 1.5rem;
+      box-shadow: 0 10px 30px rgba(0, 0, 0, 0.2);
+      transition: all 0.6s cubic-bezier(0.4, 0, 0.2, 1);
+      will-change: transform;
+      animation: profileFloat 6s ease-in-out infinite;
+    }
+
+    @keyframes profileFloat {
+      0%, 100% { transform: translateY(0px) scale(1); }
+      50% { transform: translateY(-10px) scale(1.02); }
+    }
+
+    .profile-img:hover {
+      transform: scale(1.1) rotate(5deg);
+      box-shadow: 0 20px 50px rgba(0, 0, 0, 0.4);
+    }
+
+    h1 {
+      font-size: 2.2rem;
+      font-weight: 700;
+      margin-bottom: 0.8rem;
+      color: var(--text-primary);
+      text-shadow: 2px 2px 4px rgba(0, 0, 0, 0.3);
+      font-family: 'Inter', sans-serif;
+      animation: textGlow 4s ease-in-out infinite;
+    }
+
+    @keyframes textGlow {
+      0%, 100% { text-shadow: 2px 2px 4px rgba(0, 0, 0, 0.3); }
+      50% { text-shadow: 2px 2px 20px rgba(255, 255, 255, 0.3); }
+    }
+
+    .section-title {
+      font-size: 2rem;
+      font-weight: 600;
+      margin-bottom: 2rem;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      gap: 0.5rem;
+      color: var(--text-primary);
+      text-shadow: 2px 2px 4px rgba(0, 0, 0, 0.3);
+      font-family: 'Inter', sans-serif;
+      animation: titleSlide 1s cubic-bezier(0.4, 0, 0.2, 1);
+    }
+
+    @keyframes titleSlide {
+      from { transform: translateY(-30px); opacity: 0; }
+      to { transform: translateY(0); opacity: 1; }
+    }
+
+    .typing-text {
+      font-size: 1.1rem;
+      color: var(--text-secondary);
+      margin-bottom: 2rem;
+      min-height: 2rem;
+      font-weight: 400;
+      line-height: 1.6;
+      text-shadow: 1px 1px 2px rgba(0, 0, 0, 0.2);
+      animation: fadeInUp 1.5s cubic-bezier(0.4, 0, 0.2, 1) 0.3s both;
+    }
+
+    .social-links {
+      margin: 2rem 0;
+    }
+
+    .social-links a {
+      display: flex;
+      align-items: center;
+      gap: 12px;
+      justify-content: flex-start;
+      background: rgba(255, 255, 255, 0.1);
+      color: var(--text-primary);
+      text-decoration: none;
+      padding: 1rem 1.5rem;
+      margin: 0.8rem 0;
+      border-radius: 16px;
+      border: 1px solid rgba(255, 255, 255, 0.15);
+      transition: all 0.4s cubic-bezier(0.4, 0, 0.2, 1);
+      font-weight: 500;
+      text-shadow: 1px 1px 2px rgba(0, 0, 0, 0.2);
+      will-change: transform, background;
+      animation: slideInLeft 0.8s cubic-bezier(0.4, 0, 0.2, 1);
+      animation-delay: calc(var(--delay, 0) * 0.1s);
+    }
+
+    .social-links a:nth-child(1) { --delay: 1; }
+    .social-links a:nth-child(2) { --delay: 2; }
+    .social-links a:nth-child(3) { --delay: 3; }
+
+    .social-links a:hover {
+      background: rgba(255, 255, 255, 0.2);
+      transform: translateX(15px) scale(1.02);
+      box-shadow: 0 15px 35px rgba(0, 0, 0, 0.3);
+    }
+
+    .social-links a:active {
+      transform: translateX(15px) scale(0.98);
+    }
+
+    .social-links i {
+      width: 24px;
+      font-size: 1.2rem;
+      color: rgba(255, 255, 255, 0.9);
+      transition: all 0.3s ease;
+    }
+
+    .social-links a:hover i {
+      transform: scale(1.2) rotate(10deg);
+    }
+
+    .loading-screen {
+      position: fixed;
+      top: 0; left: 0;
+      width: 100vw;
+      height: 100vh;
+      background: var(--current-bg);
+      display: flex;
+      justify-content: center;
+      align-items: center;
+      flex-direction: column;
+      z-index: 9999;
+      animation: fadeOut 1.5s 2.5s cubic-bezier(0.4, 0, 0.2, 1) forwards;
+    }
+
+    .loading-screen h1 {
+      font-size: 2.5rem;
+      animation: loadingPulse 2s ease-in-out infinite;
+      font-weight: 600;
+      color: var(--text-primary);
+      text-shadow: 2px 2px 4px rgba(0, 0, 0, 0.3);
+    }
+
+    .loading-spinner {
+      width: 60px;
+      height: 60px;
+      border: 4px solid rgba(255, 255, 255, 0.2);
+      border-top: 4px solid var(--text-primary);
+      border-radius: 50%;
+      animation: spin 1s cubic-bezier(0.4, 0, 0.2, 1) infinite;
+      margin-top: 2rem;
+    }
+
+    .loading-dots {
+      display: flex;
+      gap: 8px;
+      margin-top: 1rem;
+    }
+
+    .loading-dot {
+      width: 8px;
+      height: 8px;
+      background: var(--text-primary);
+      border-radius: 50%;
+      animation: dotBounce 1.4s ease-in-out infinite;
+    }
+
+    .loading-dot:nth-child(1) { animation-delay: 0s; }
+    .loading-dot:nth-child(2) { animation-delay: 0.2s; }
+    .loading-dot:nth-child(3) { animation-delay: 0.4s; }
+
+    @keyframes dotBounce {
+      0%, 80%, 100% { transform: scale(0.8); opacity: 0.5; }
+      40% { transform: scale(1.2); opacity: 1; }
+    }
+
+    @keyframes spin {
+      0% { transform: rotate(0deg); }
+      100% { transform: rotate(360deg); }
+    }
+
+    @keyframes loadingPulse {
+      0%, 100% { opacity: 0.7; transform: scale(1); }
+      50% { opacity: 1; transform: scale(1.05); }
+    }
+
+    @keyframes fadeOut {
+      to { opacity: 0; visibility: hidden; }
+    }
+
+    @keyframes slideUpFade {
+      from { opacity: 0; transform: translateY(50px) scale(0.9); }
+      to { opacity: 1; transform: translateY(0) scale(1); }
+    }
+
+    @keyframes fadeInUp {
+      from { opacity: 0; transform: translateY(30px); }
+      to { opacity: 1; transform: translateY(0); }
+    }
+
+    @keyframes slideInLeft {
+      from { opacity: 0; transform: translateX(-50px); }
+      to { opacity: 1; transform: translateX(0); }
+    }
+
+    .btn-primary {
+      background: linear-gradient(135deg, rgba(255, 255, 255, 0.9) 0%, rgba(255, 255, 255, 0.7) 100%);
+      color: var(--harvey-dark);
+      font-weight: 600;
+      border: none;
+      padding: 1rem 2rem;
+      font-size: 1rem;
+      border-radius: 50px;
+      cursor: pointer;
+      transition: all 0.4s cubic-bezier(0.4, 0, 0.2, 1);
+      min-width: 140px;
+      text-align: center;
+      box-shadow: 0 4px 15px rgba(0, 0, 0, 0.2);
+      position: relative;
+      overflow: hidden;
+      font-family: 'Inter', sans-serif;
+      will-change: transform;
+    }
+
+    .btn-primary::before {
+      content: '';
+      position: absolute;
+      top: 0;
+      left: -100%;
+      width: 100%;
+      height: 100%;
+      background: linear-gradient(90deg, transparent, rgba(255, 255, 255, 0.4), transparent);
+      transition: left 0.6s cubic-bezier(0.4, 0, 0.2, 1);
+    }
+
+    .btn-primary:hover::before {
+      left: 100%;
+    }
+
+    .btn-primary:hover {
+      transform: translateY(-3px) scale(1.05);
+      box-shadow: 0 15px 35px rgba(0, 0, 0, 0.4);
+    }
+
+    .btn-primary:active {
+      transform: translateY(-1px) scale(1.02);
+    }
+
+    .btn-secondary {
+      background: rgba(255, 255, 255, 0.1);
+      color: var(--text-primary);
+      border: 1px solid rgba(255, 255, 255, 0.2);
+      font-weight: 500;
+      padding: 0.8rem 1.5rem;
+      font-size: 0.95rem;
+      border-radius: 50px;
+      cursor: pointer;
+      transition: all 0.4s cubic-bezier(0.4, 0, 0.2, 1);
+      backdrop-filter: blur(10px);
+      text-shadow: 1px 1px 2px rgba(0, 0, 0, 0.2);
+      font-family: 'Inter', sans-serif;
+      will-change: transform;
+    }
+
+    .btn-secondary:hover {
+      background: rgba(255, 255, 255, 0.2);
+      transform: translateY(-2px);
+      box-shadow: 0 10px 25px rgba(0, 0, 0, 0.2);
+    }
+
+    .btn-secondary:active {
+      transform: translateY(0);
+    }
+
+    .button-group {
+      display: flex;
+      gap: 1rem;
+      justify-content: center;
+      flex-wrap: wrap;
+      margin: 2rem 0;
+    }
+
+    .product-grid {
+      display: grid;
+      gap: 1.5rem;
+      margin-bottom: 2rem;
+    }
+
+    .product-card {
+      background: rgba(255, 255, 255, 0.1);
+      backdrop-filter: blur(15px);
+      border: 1px solid rgba(255, 255, 255, 0.15);
+      border-radius: 20px;
+      padding: 2rem;
+      transition: all 0.6s cubic-bezier(0.4, 0, 0.2, 1);
+      position: relative;
+      overflow: hidden;
+      will-change: transform;
+      animation: cardSlideIn 0.8s cubic-bezier(0.4, 0, 0.2, 1);
+      animation-delay: calc(var(--card-delay, 0) * 0.1s);
+    }
+
+    .product-card:nth-child(1) { --card-delay: 1; }
+    .product-card:nth-child(2) { --card-delay: 2; }
+    .product-card:nth-child(3) { --card-delay: 3; }
+    .product-card:nth-child(4) { --card-delay: 4; }
+
+    @keyframes cardSlideIn {
+      from { opacity: 0; transform: translateY(50px) rotateX(10deg); }
+      to { opacity: 1; transform: translateY(0) rotateX(0deg); }
+    }
+
+    .product-card::before {
+      content: '';
+      position: absolute;
+      top: 0;
+      left: 0;
+      right: 0;
+      height: 2px;
+      background: linear-gradient(90deg, rgba(255, 255, 255, 0.3), rgba(255, 255, 255, 0.1));
+      animation: shimmer 3s ease-in-out infinite;
+    }
+
+    .product-card:hover {
+      transform: translateY(-15px) scale(1.02);
+      box-shadow: var(--shadow-heavy);
+      background: rgba(255, 255, 255, 0.15);
+    }
+
+    .product-card:hover::after {
+      content: '';
+      position: absolute;
+      top: 0;
+      left: 0;
+      right: 0;
+      bottom: 0;
+      background: radial-gradient(circle at center, rgba(255, 255, 255, 0.1) 0%, transparent 70%);
+      pointer-events: none;
+    }
+
+    .product-header {
+      display: flex;
+      align-items: center;
+      gap: 1rem;
+      margin-bottom: 1.5rem;
+    }
+
+    .product-img {
+      width: 60px;
+      height: 60px;
+      border-radius: 12px;
+      object-fit: cover;
+      border: 2px solid rgba(255, 255, 255, 0.3);
+      transition: all 0.4s cubic-bezier(0.4, 0, 0.2, 1);
+    }
+
+    .product-card:hover .product-img {
+      transform: scale(1.1) rotate(5deg);
+    }
+
+    .product-info h3 {
+      font-size: 1.3rem;
+      font-weight: 600;
+      margin-bottom: 0.5rem;
+      color: var(--text-primary);
+      text-shadow: 1px 1px 2px rgba(0, 0, 0, 0.2);
+      font-family: 'Inter', sans-serif;
+    }
+
+    .product-category {
+      background: rgba(255, 255, 255, 0.2);
+      color: var(--text-primary);
+      padding: 0.3rem 0.8rem;
+      border-radius: 20px;
+      font-size: 0.8rem;
+      font-weight: 500;
+      text-shadow: 1px 1px 2px rgba(0, 0, 0, 0.2);
+      transition: all 0.3s ease;
+    }
+
+    .product-card:hover .product-category {
+      background: rgba(255, 255, 255, 0.3);
+      transform: scale(1.05);
+    }
+
+    .product-description {
+      color: var(--text-secondary);
+      line-height: 1.6;
+      margin-bottom: 1.5rem;
+      font-size: 0.95rem;
+      text-shadow: 1px 1px 2px rgba(0, 0, 0, 0.1);
+    }
+
+    .product-footer {
+      display: flex;
+      justify-content: space-between;
+      align-items: center;
+    }
+
+    .product-price {
+      font-size: 1.4rem;
+      font-weight: 700;
+      color: var(--text-primary);
+      text-shadow: 1px 1px 2px rgba(0, 0, 0, 0.2);
+      font-family: 'Inter', sans-serif;
+      animation: priceGlow 3s ease-in-out infinite;
+    }
+
+    @keyframes priceGlow {
+      0%, 100% { text-shadow: 1px 1px 2px rgba(0, 0, 0, 0.2); }
+      50% { text-shadow: 1px 1px 15px rgba(255, 255, 255, 0.3); }
+    }
+
+    .payment-method {
+      background: rgba(255, 255, 255, 0.1);
+      backdrop-filter: blur(15px);
+      border: 1px solid rgba(255, 255, 255, 0.15);
+      border-radius: 16px;
+      padding: 1.5rem;
+      margin-bottom: 1rem;
+      transition: all 0.5s cubic-bezier(0.4, 0, 0.2, 1);
+      display: flex;
+      align-items: center;
+      gap: 1rem;
+      will-change: transform;
+      animation: paymentSlide 0.8s cubic-bezier(0.4, 0, 0.2, 1);
+      animation-delay: calc(var(--payment-delay, 0) * 0.15s);
+    }
+
+    .payment-method:nth-child(1) { --payment-delay: 1; }
+    .payment-method:nth-child(2) { --payment-delay: 2; }
+    .payment-method:nth-child(3) { --payment-delay: 3; }
+
+    @keyframes paymentSlide {
+      from { opacity: 0; transform: translateX(-30px); }
+      to { opacity: 1; transform: translateX(0); }
+    }
+
+    .payment-method:hover {
+      background: rgba(255, 255, 255, 0.15);
+      transform: translateX(10px) scale(1.02);
+      box-shadow: 0 10px 30px rgba(0, 0, 0, 0.2);
+    }
+
+    .payment-img {
+      width: 50px;
+      height: 50px;
+      border-radius: 10px;
+      object-fit: cover;
+      transition: all 0.4s cubic-bezier(0.4, 0, 0.2, 1);
+    }
+
+    .payment-method:hover .payment-img {
+      transform: scale(1.1) rotate(3deg);
+    }
+
+    .payment-info {
+      flex: 1;
+      text-align: left;
+    }
+
+    .payment-info h4 {
+      font-size: 1.1rem;
+      font-weight: 600;
+      margin-bottom: 0.3rem;
+      color: var(--text-primary);
+      text-shadow: 1px 1px 2px rgba(0, 0, 0, 0.2);
+      font-family: 'Inter', sans-serif;
+    }
+
+    .payment-info p {
+      font-size: 0.9rem;
+      color: var(--text-secondary);
+      text-shadow: 1px 1px 2px rgba(0, 0, 0, 0.1);
+    }
+
+    .qris-section {
+      background: rgba(255, 255, 255, 0.1);
+      backdrop-filter: blur(15px);
+      border: 1px solid rgba(255, 255, 255, 0.15);
+      border-radius: 20px;
+      padding: 2rem;
+      margin: 2rem 0;
+      text-align: center;
+      animation: qrisFloat 1s cubic-bezier(0.4, 0, 0.2, 1);
+    }
+
+    @keyframes qrisFloat {
+      from { opacity: 0; transform: translateY(30px) scale(0.9); }
+      to { opacity: 1; transform: translateY(0) scale(1); }
+    }
+
+    .qris-section h3 {
+      font-size: 1.4rem;
+      font-weight: 600;
+      margin-bottom: 1.5rem;
+      color: var(--text-primary);
+      text-shadow: 1px 1px 2px rgba(0, 0, 0, 0.2);
+      font-family: 'Inter', sans-serif;
+    }
+
+    .qris-code {
+      width: 200px;
+      height: 200px;
+      border-radius: 16px;
+      border: 3px solid rgba(255, 255, 255, 0.3);
+      box-shadow: 0 10px 30px rgba(0, 0, 0, 0.2);
+      margin: 0 auto 1rem;
+      cursor: pointer;
+      transition: all 0.6s cubic-bezier(0.4, 0, 0.2, 1);
+      will-change: transform;
+      animation: qrisGlow 4s ease-in-out infinite;
+    }
+
+    @keyframes qrisGlow {
+      0%, 100% { box-shadow: 0 10px 30px rgba(0, 0, 0, 0.2); }
+      50% { box-shadow: 0 20px 50px rgba(255, 255, 255, 0.1); }
+    }
+
+    .qris-code:hover {
+      transform: scale(1.1) rotate(2deg);
+      box-shadow: 0 25px 60px rgba(0, 0, 0, 0.4);
+    }
+
+    .qris-code:active {
+      transform: scale(1.05) rotate(2deg);
+    }
+
+    .download-btn {
+      background: rgba(255, 255, 255, 0.2);
+      color: var(--text-primary);
+      border: 1px solid rgba(255, 255, 255, 0.3);
+      padding: 0.5rem 1rem;
+      border-radius: 25px;
+      cursor: pointer;
+      transition: all 0.4s cubic-bezier(0.4, 0, 0.2, 1);
+      font-size: 0.9rem;
+      margin-top: 1rem;
+      text-shadow: 1px 1px 2px rgba(0, 0, 0, 0.2);
+      font-family: 'Inter', sans-serif;
+      will-change: transform;
+    }
+
+    .download-btn:hover {
+      background: rgba(255, 255, 255, 0.3);
+      transform: translateY(-2px) scale(1.05);
+      box-shadow: 0 8px 20px rgba(0, 0, 0, 0.2);
+    }
+
+    .download-btn:active {
+      transform: translateY(0) scale(1.02);
+    }
+
+    .footer-text {
+      margin-top: 2rem;
+      font-size: 0.85rem;
+      color: var(--text-secondary);
+      font-style: italic;
+      line-height: 1.5;
+      text-shadow: 1px 1px 2px rgba(0, 0, 0, 0.1);
+      animation: fadeInUp 1.5s cubic-bezier(0.4, 0, 0.2, 1) 0.8s both;
+    }
+
+    .status-badge {
+      padding: 0.2rem 0.6rem;
+      border-radius: 12px;
+      font-size: 0.75rem;
+      font-weight: 500;
+      text-shadow: none;
+      transition: all 0.3s ease;
+    }
+
+    .status-available {
+      background: rgba(34, 197, 94, 0.3);
+      color: #ffffff;
+      border: 1px solid rgba(34, 197, 94, 0.5);
+      animation: statusPulse 2s ease-in-out infinite;
+    }
+
+    @keyframes statusPulse {
+      0%, 100% { transform: scale(1); }
+      50% { transform: scale(1.05); }
+    }
+
+    .status-coming-soon {
+      background: rgba(251, 191, 36, 0.3);
+      color: #ffffff;
+      border: 1px solid rgba(251, 191, 36, 0.5);
+    }
+
+    .notification {
+      position: fixed;
+      top: 20px;
+      left: 20px;
+      background: rgba(255, 255, 255, 0.95);
+      color: #1f4037;
+      padding: 1rem 1.5rem;
+      border-radius: 12px;
+      font-weight: 600;
+      box-shadow: 0 15px 40px rgba(0,0,0,0.3);
+      z-index: 10000;
+      animation: notificationSlide 0.6s cubic-bezier(0.4, 0, 0.2, 1);
+      font-family: 'Inter', sans-serif;
+      backdrop-filter: blur(10px);
+      border: 1px solid rgba(255, 255, 255, 0.2);
+    }
+
+    @keyframes notificationSlide {
+      from { transform: translateX(-100%) scale(0.8); opacity: 0; }
+      to { transform: translateX(0) scale(1); opacity: 1; }
+    }
+
+    @media (max-width: 768px) {
+      .container, .main-content {
+        padding: 2rem;
+        margin: 0.5rem;
+        max-width: 95%;
+      }
+      
+      h1 {
+        font-size: 1.8rem;
+      }
+      
+      .section-title {
+        font-size: 1.6rem;
+      }
+      
+      .product-card {
+        padding: 1.5rem;
+      }
+      
+      .qris-code {
+        width: 160px;
+        height: 160px;
+      }
+
+      .product-header {
+        flex-direction: column;
+        text-align: center;
+      }
+
+      .payment-method {
+        flex-direction: column;
+        text-align: center;
+      }
+
+      .payment-info {
+        text-align: center;
+      }
+
+      .theme-toggle {
+        top: 15px;
+        right: 15px;
+        width: 45px;
+        height: 45px;
+        font-size: 1.1rem;
+      }
+    }
+
+    @media (max-width: 480px) {
+      .container, .main-content {
+        padding: 1.5rem;
+      }
+
+      .button-group {
+        flex-direction: column;
+      }
+      
+      .btn-primary, .btn-secondary {
+        width: 100%;
+      }
+      
+      .product-footer {
+        flex-direction: column;
+        gap: 1rem;
+        align-items: stretch;
+      }
+
+      .social-links a {
+        justify-content: center;
+      }
+
+      h1 {
+        font-size: 1.6rem;
+      }
+
+      .section-title {
+        font-size: 1.4rem;
+      }
+
+      .qris-code {
+        width: 140px;
+        height: 140px;
+      }
+    }
+
+    @media (max-width: 360px) {
+      .container, .main-content {
+        padding: 1rem;
+        margin: 0.25rem;
+      }
+
+      .profile-img {
+        width: 100px;
+        height: 100px;
+      }
+
+      .product-card {
+        padding: 1rem;
+      }
+
+      .qris-section {
+        padding: 1.5rem;
+      }
+    }
+
+    @media (prefers-reduced-motion: reduce) {
+      *, *::before, *::after {
+        animation-duration: 0.01ms !important;
+        animation-iteration-count: 1 !important;
+        transition-duration: 0.01ms !important;
+      }
+    }
+  </style>
+</head>
+<body data-theme="dark">
+  <div class="theme-toggle" onclick="toggleTheme()">
+    <i class="fas fa-sun" id="themeIcon"></i>
+  </div>
+
+  <div class="loading-screen" id="loading">
+    <h1>Ken Site Portfolio</h1>
+    <div class="loading-spinner"></div>
+    <div class="loading-dots">
+      <div class="loading-dot"></div>
+      <div class="loading-dot"></div>
+      <div class="loading-dot"></div>
+    </div>
+  </div>
+
+  <div class="container" id="intro">
+    <img src="https://files.catbox.moe/ogufar.jpg" alt="Ken Profile" class="profile-img">
+    <h1>Ken</h1>
+    <div class="typing-text" id="introTyping"></div>
+    <div class="button-group">
+      <button class="btn-primary" onclick="goToMain()">
+        <i class="fas fa-rocket"></i> Get Started
+      </button>
+    </div>
+  </div>
+
+  <div class="main-content" id="main">
+    <img src="https://files.catbox.moe/ogufar.jpg" alt="Ken Masih Pemula Profile" class="profile-img">
+    <h1>Ken</h1>
+    <div class="typing-text" id="mainTyping"></div>
+    
+    <div class="social-links">
+      <a href="https://t.me/sirrkenn" target="_blank">
+        <i class="fab fa-telegram"></i>
+        <span>telegram </span>
+      </a>
+      <a href="https://www.instagram.com/mhdfsl20/profilecard/?igsh=b3VmZzlwYWM5cTl6" target="_blank">
+        <i class="fab fa-instagram "></i>
+        <span>instagram </span>
+      </a>
+      <a href="https://github.com/Elainabot13" target="_blank">
+        <i class="fab fa-github"></i>
+        <span>GitHub Portfolio</span>
+      </a>
+    </div>
+    
+    <div class="button-group">
+      <button class="btn-primary" onclick="showSection('shop')">
+        <i class="fas fa-shopping-bag"></i> Our Services
+      </button>
+      <button class="btn-primary" onclick="showSection('payment')">
+        <i class="fas fa-credit-card"></i> Payment Options
+      </button>
+    </div>
+    
+    <div class="footer-text">
+      <p>"Cintamu kayak undefined, selalu ada di awal, tapi hilang saat dijalankan."</p>
+      <p style="margin-top: 1rem; font-size: 0.75rem;">© 2020-2025 ken. All rights reserved.</p>
+    </div>
+  </div>
+
+  <div class="main-content" id="shop" style="display:none;">
+    <div class="section-title">
+      <i class="fas fa-store"></i>
+      Professional Services
+    </div>
+    
+    <div class="product-grid">
+      <div class="product-card">
+        <div class="product-header">
+          <img src="https://files.catbox.moe/xivxa9.jpg" alt="Telegram Bot" class="product-img">
+          <div class="product-info">
+            <h3><i class="fab fa-telegram"></i> Telegram Bot Development</h3>
+            <span class="product-category">Bot Development</span>
+          </div>
+        </div>
+        <p class="product-description">
+          Custom Telegram bots with advanced features including admin panels, automated responses, and integration capabilities.
+        </p>
+        <div class="product-footer">
+          <span class="product-price">Starting from 25.000 </span>
+          <a href="https://t.me/sirrkenn" target="_blank" class="btn-primary">
+            <i class="fas fa-shopping-cart"></i> Order Now
+          </a>
+        </div>
+      </div>
+
+      <div class="product-card">
+        <div class="product-header">
+          <img src="https://files.catbox.moe/xivxa9.jpg" alt="WhatsApp Bot (coming soon)" class="product-img">
+          <div class="product-info">
+            <h3><i class="fab fa-whatsapp"></i> WhatsApp Bot Solutions</h3>
+            <span class="product-category">Bot Development</span>
+          </div>
+        </div>
+        <p class="product-description">
+          Professional WhatsApp automation bots with multi-device support, business integrations, and custom workflows.
+        </p>
+        <div class="product-footer">
+          <span class="product-price">Starting from 100.000 IDR/$6,14</span>
+          <a href="https://t.me/sirrkenn" target="_blank" class="btn-primary">
+            <i class="fas fa-shopping-cart"></i> Order Now
+          </a>
+        </div>
+      </div>
+
+      <div class="product-card">
+        <div class="product-header">
+          <img src="https://files.catbox.moe/xivxa9.jpg" alt="Custom Scripts" class="product-img">
+          <div class="product-info">
+            <h3><i class="fas fa-code"></i> Custom Script Development</h3>
+            <span class="product-category">Development</span>
+          </div>
+        </div>
+        <p class="product-description">
+          Tailored automation scripts, APIs, and backend solutions designed to meet your specific business requirements.
+        </p>
+        <div class="product-footer">
+          <span class="product-price">Starting from 50.000 IDR/$3,07</span>
+          <a href="https://t.me/sirrkenn" target="_blank" class="btn-primary">
+            <i class="fas fa-shopping-cart"></i> Order Now
+          </a>
+        </div>
+      </div>
+
+      <div class="product-card">
+        <div class="product-header">
+          <img src="https://files.catbox.moe/xivxa9.jpg" alt="Website Development (coming soon)" class="product-img">
+          <div class="product-info">
+            <h3><i class="fas fa-globe"></i> Website Development</h3>
+            <span class="product-category">Web Development</span>
+          </div>
+        </div>
+        <p class="product-description">
+          Modern, responsive websites including landing pages, portfolios, and business websites with SEO optimization.
+        </p>
+        <div class="product-footer">
+          <span class="product-price">Starting from 100.000 IDR/$6,14</span>
+          <a href="https://t.me/sirrkenn" target="_blank" class="btn-primary">
+            <i class="fas fa-shopping-cart"></i> Order Now
+          </a>
+        </div>
+      </div>
+    </div>
+    
+    <button class="btn-secondary" onclick="backToMain()">
+      <i class="fas fa-arrow-left"></i> Back to Main
+    </button>
+  </div>
+
+  <div class="main-content" id="payment" style="display:none;">
+    <div class="section-title">
+      <i class="fas fa-credit-card"></i>
+      Payment Methods
+    </div>
+    
+    <div class="payment-method">
+      <img src="https://files.catbox.moe/rs5teo.jpg" class="payment-img" alt="Dana">
+      <div class="payment-info">
+        <h4><i class="fas fa-wallet"></i> Dana Digital Wallet</h4>
+        <p>Fast and secure payment via Dana e-wallet</p>
+      </div>
+      <div style="text-align: right;">
+        <span class="status-badge status-available">Available</span>
+        <button class="btn-primary" onclick="copyNumber('083139806211')" style="margin-top: 0.5rem; padding: 0.5rem 1rem; font-size: 0.9rem;">
+          <i class="fas fa-copy"></i> Copy Number
+        </button>
+      </div>
+    </div>
+
+    <div class="payment-method">
+      <img src="https://files.catbox.moe/kwuxbv.jpg" class="payment-img" alt="OVO">
+      <div class="payment-info">
+        <h4><i class="fas fa-mobile-alt"></i> OVO Digital Payment</h4>
+        <p>Coming soon - OVO payment integration</p>
+      </div>
+      <div style="text-align: right;">
+        <span class="status-badge status-coming-soon">Coming Soon</span>
+        <button class="btn-secondary" disabled style="margin-top: 0.5rem; padding: 0.5rem 1rem; font-size: 0.9rem; opacity: 0.5;">
+          <i class="fas fa-clock"></i> Not Available
+        </button>
+      </div>
+    </div>
+
+    <div class="payment-method">
+      <img src="https://files.catbox.moe/pvo95b.jpg" class="payment-img" alt="GoPay">
+      <div class="payment-info">
+        <h4><i class="fas fa-motorcycle"></i> GoPay Integration</h4>
+        <p>Coming soon - GoPay payment support</p>
+      </div>
+      <div style="text-align: right;">
+        <span class="status-badge status-coming-soon">Coming Soon</span>
+        <button class="btn-secondary" disabled style="margin-top: 0.5rem; padding: 0.5rem 1rem; font-size: 0.9rem; opacity: 0.5;">
+          <i class="fas fa-clock"></i> Not Available
+        </button>
+      </div>
+    </div>
+
+    <div class="qris-section">
+      <h3><i class="fas fa-qrcode"></i> Universal QRIS Payment</h3>
+      <img src="https://files.catbox.moe/wjyhfw.jpg" alt="QRIS Code" class="qris-code" id="qrisImage" />
+      <p style="color: var(--text-secondary); margin-top: 1rem;">
+        Scan this QR code with any Indonesian e-wallet app for instant payment
+      </p>
+      <button class="download-btn" onclick="downloadQRIS()">
+        <i class="fas fa-download"></i> Download QRIS
+      </button>
+    </div>
+
+    <button class="btn-secondary" onclick="backToMain()">
+      <i class="fas fa-arrow-left"></i> Back to Main
+    </button>
+  </div>
+
+  <audio id="audio" src="https://files.catbox.moe/1d4qye.mp3" preload="auto"></audio>
+
+  <script>
+    const loading = document.getElementById('loading');
+    const intro = document.getElementById('intro');
+    const main = document.getElementById('main');
+    const audio = document.getElementById('audio');
+    const themeIcon = document.getElementById('themeIcon');
+
+    const texts = ["Hello, I'm Ken.", "Web Developer. Code Dreamer.", "From idea to launch.", "Click - Type - Create.", "Welcome to my world."];
+    
+    function typeText(el, words) {
+      let index = 0, char = 0, isComplete = false;
+      function type() {
+        if (!isComplete && index < words.length) {
+          if (char <= words[index].length) {
+            el.textContent = words[index].slice(0, char++);
+            setTimeout(type, 80);
+          } else {
+            index++; char = 0;
+            setTimeout(type, 1000);
+          }
+        } else if (!isComplete) {
+          isComplete = true;
+          el.innerHTML += "<br><span style='color: rgba(255, 255, 255, 0.9); font-weight: 500;'>Transforming Ideas into Digital Solutions</span>";
+        }
+      }
+      type();
+    }
+
+    function toggleTheme() {
+      const body = document.body;
+      const currentTheme = body.getAttribute('data-theme');
+      const newTheme = currentTheme === 'dark' ? 'light' : 'dark';
+      
+      body.setAttribute('data-theme', newTheme);
+      themeIcon.className = newTheme === 'dark' ? 'fas fa-sun' : 'fas fa-moon';
+      
+      localStorage.setItem('theme', newTheme);
+    }
+
+    function loadTheme() {
+      const savedTheme = localStorage.getItem('theme') || 'dark';
+      document.body.setAttribute('data-theme', savedTheme);
+      themeIcon.className = savedTheme === 'dark' ? 'fas fa-sun' : 'fas fa-moon';
+    }
+
+    window.onload = () => {
+      loadTheme();
+      setTimeout(() => {
+        loading.style.display = 'none';
+        intro.style.display = 'block';
+        typeText(document.getElementById("introTyping"), texts);
+      }, 4000);
+    };
+
+    function goToMain() {
+      intro.style.display = 'none';
+      main.style.display = 'block';
+      audio.play().catch(e => console.log('Audio autoplay prevented'));
+      typeText(document.getElementById("mainTyping"), texts);
+    }
+
+    function showSection(section) {
+      document.querySelectorAll('.main-content').forEach(el => el.style.display = 'none');
+      document.getElementById(section).style.display = 'block';
+    }
+
+    function backToMain() {
+      document.querySelectorAll('.main-content').forEach(el => el.style.display = 'none');
+      main.style.display = 'block';
+    }
+
+    function copyNumber(number) {
+      navigator.clipboard.writeText(number).then(() => {
+        showNotification(`<i class="fas fa-check-circle"></i> Number copied: ${number}`);
+      }).catch(() => {
+        showNotification(`<i class="fas fa-exclamation-circle"></i> Failed to copy. Please copy manually: ${number}`);
+      });
+    }
+
+    function downloadQRIS() {
+      const qrisImage = document.getElementById('qrisImage');
+      const canvas = document.createElement('canvas');
+      const ctx = canvas.getContext('2d');
+      const img = new Image();
+      
+      img.crossOrigin = 'anonymous';
+      img.onload = function() {
+        canvas.width = img.width;
+        canvas.height = img.height;
+        ctx.drawImage(img, 0, 0);
+        
+        const link = document.createElement('a');
+        link.download = 'Ken-QRIS-Payment.png';
+        link.href = canvas.toDataURL();
+        link.click();
+        
+        showNotification(`<i class="fas fa-download"></i> QRIS downloaded successfully!`);
+      };
+      
+      img.src = qrisImage.src;
+    }
+
+    function showNotification(message) {
+      const notification = document.createElement('div');
+      notification.className = 'notification';
+      notification.innerHTML = message;
+      document.body.appendChild(notification);
+      
+      setTimeout(() => {
+        notification.style.animation = 'notificationSlide 0.6s cubic-bezier(0.4, 0, 0.2, 1) reverse';
+        setTimeout(() => notification.remove(), 600);
+      }, 3000);
+    }
+
+    document.addEventListener('DOMContentLoaded', function() {
+      const observer = new IntersectionObserver((entries) => {
+        entries.forEach(entry => {
+          if (entry.isIntersecting) {
+            entry.target.style.animationPlayState = 'running';
+          }
+        });
+      });
+
+      document.querySelectorAll('.product-card, .payment-method').forEach(el => {
+        observer.observe(el);
+      });
+    });
+  </script>
+</body>
+</html>
